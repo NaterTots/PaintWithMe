@@ -1,0 +1,24 @@
+PORT		BUTTON
+A0		RotationZ (A)
+A1		RotationZ (A)
+A2		RotationZ (A)
+A3		RotationZ (A)
+A4		Buttons9 (D)
+A5		Buttons12 (D)
+
+D0
+D1
+D2		Buttons3 (D)
+D3		Buttons2 (D)
+D4		Buttons0 (D)
+D5		Buttons1 (D)
+D6		PointOfViewControllers0 (D) -diff high value
+D7		PointOfViewControllers0 (D) -diff high value
+D8		PointOfViewControllers0 (D) -diff high value
+D9		PointOfViewControllers0 (D) -diff high value
+D10		Buttons4 (D)
+D11		Buttons5 (D)
+D12		Buttons8 (D)
+D13		--
+
+D6-D9 -> can combine values
