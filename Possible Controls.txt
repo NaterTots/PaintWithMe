@@ -1,1 +1,38 @@
-Rock Band Foot Pedal (Digital)
+Kinect Gestures
+
+- Right Hand Swipe
+	- Right hand moving at least 30 in/s to the right
+	- Right hand above right shoulder
+	- Output: Keyboard R
+	- Result: 
+
+- Left Hand Swipe
+	- Left hand moving at least 30 in/s to the left
+	- Left hand above left shoulder
+	- Result: Keyboard L
+
+- Jump
+	- Jump more than a foot
+	- Result: Keyboard J
+
+- Right Foot Kick
+	- Right foot moving at least 30 in/s to the right
+	- Right foot above right knee
+	- Result: Keyboard T
+
+- Left Foot Kick
+	- Left foot moving at least 30 in/s to the left
+	- Left foot above left knee
+	- Result: Keyboard K
+
+- Hip Shake
+	- Hip moving at least XX in/s to the left
+	- wait
+	- Hip moving at least XX in/s to the right
+	- Result: Keyboard H
+
+Digital Controls
+
+Rock Band Foot Pedal
+"Electric Chair" Switch
+Door Bell?
