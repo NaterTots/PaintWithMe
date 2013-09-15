@@ -9,11 +9,14 @@ namespace PaintWithMe
     {
         public int ScreenWidth;
         public int ScreenHeight;
+        public string RockBandDrumsGuid;
+
 
         public void Initialize()
         {
             ScreenWidth = 800;
             ScreenHeight = 480;
+            RockBandDrumsGuid = "95062b40-1b2b-11e3-8001-444553540000";
         }
 
 

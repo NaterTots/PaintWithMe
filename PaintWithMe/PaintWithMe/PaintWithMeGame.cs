@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -18,6 +19,9 @@ namespace PaintWithMe
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        System.Threading.Timer _backgroundCycleTimer;
+
+        const int BackgroundTimerPeriod = 1000 * 60 * 15; //Fifteen Minutes
 
         List<IInputDevice> inputDevices = new List<IInputDevice>();
         List<IPaintingAction> paintingActions = new List<IPaintingAction>();
@@ -39,6 +43,8 @@ namespace PaintWithMe
             inputDevices.Add(new KinectDevice());
             inputDevices.Add(new KeyboardDevice());
             inputDevices.Add(new JoystickDevice());
+
+            _backgroundCycleTimer = new Timer(OnCycleBackground, null, -1, Timeout.Infinite);
         }
 
         /// <summary>
@@ -60,6 +66,8 @@ namespace PaintWithMe
                 {
                     inputDevice.Initialize();
                 }
+
+                _backgroundCycleTimer.Change(BackgroundTimerPeriod, Timeout.Infinite);
             }
             catch (Exception e)
             {
@@ -140,6 +148,14 @@ namespace PaintWithMe
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void OnCycleBackground(object stateInfo)
+        {
+            //For now - remove all painting actions
+            paintingActions.Clear();
+
+            _backgroundCycleTimer.Change(BackgroundTimerPeriod, Timeout.Infinite);
         }
 
         #region IService

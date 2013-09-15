@@ -1,0 +1,63 @@
+<sensor>
+	<tracker>Microsoft</tracker>
+	<mirrormode>true</mirrormode>
+	<smoothing>true</smoothing>
+	<smoothingfactor>0.5</smoothingfactor>
+	<correction>0.5</correction>
+	<prediction>0.5</prediction>
+	<jitter>0.05</jitter>
+	<deviation>0.04</deviation>
+</sensor>
+<server>
+	<transformations>Global coordinates</transformations>
+	<automaticassignment>true</automaticassignment>
+</server>
+<gestures>
+	<gesture name="swipe_right_arm" timeout="1">
+		<input type="3">
+			<descriptor>right hand</descriptor>
+			<descriptor>to the right</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>40</descriptor>
+			<descriptor>in/sec</descriptor>
+		</input>
+		<input type="1">
+			<descriptor>right hand</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>right shoulder</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>0</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>r</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="swipe_left_arm" timeout="1">
+		<input type="3">
+			<descriptor>left hand</descriptor>
+			<descriptor>to the left</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>50</descriptor>
+			<descriptor>in/sec</descriptor>
+		</input>
+		<input type="1">
+			<descriptor>left hand</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>left shoulder</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>0</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>l</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+</gestures>
+

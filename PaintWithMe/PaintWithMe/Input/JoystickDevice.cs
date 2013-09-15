@@ -27,6 +27,13 @@ namespace PaintWithMe
             foreach (var deviceInstance in directInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AllDevices))
             {
                 joystickGuid = deviceInstance.InstanceGuid;
+
+                //TODO: is there a more elegant way to do this?
+                if (joystickGuid.ToString() == ServiceManager.Instance.GetService<ConfigurationManager>(ServiceType.ConfigurationManager).RockBandDrumsGuid)
+                {
+                    //found the rockband drums
+                   
+                }
             }
 
             // If Gamepad not found, look for a Joystick
@@ -90,6 +97,8 @@ namespace PaintWithMe
                 JoystickUpdate[] datas = joystick.GetBufferedData();
                 foreach (JoystickUpdate state in datas)
                 {
+                    Debug.WriteLine(state.Offset.ToString() + " : " + state.Value.ToString());
+
                     if (state.Offset == JoystickOffset.Buttons3 && state.Value > 0)
                     {
                         AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.JoystickButtons3), ref newPaintStrokes);
