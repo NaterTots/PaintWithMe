@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Net;
+using Microsoft.Xna.Framework.Storage;
 
 namespace PaintWithMe
 {
@@ -28,6 +30,9 @@ namespace PaintWithMe
 
         ServiceManager serviceManager = ServiceManager.Instance;
 
+        Effect effectPost;
+        RenderTarget2D renderTarget;
+
         public PaintWithMeGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -42,7 +47,9 @@ namespace PaintWithMe
 
             inputDevices.Add(new KinectDevice());
             inputDevices.Add(new KeyboardDevice());
-            inputDevices.Add(new JoystickDevice());
+            //inputDevices.Add(new JoystickDevice());
+            inputDevices.Add(new XboxDrumSetDevice());
+            inputDevices.Add(new SNESControllerDevice());
 
             _backgroundCycleTimer = new Timer(OnCycleBackground, null, -1, Timeout.Infinite);
         }
@@ -74,6 +81,8 @@ namespace PaintWithMe
                 serviceManager.GetService<ILogger>(ServiceType.Logger).Log(e);
             }
 
+            effectPost = Content.Load<Effect>("GrayscalePixelShader");
+
             base.Initialize();
         }
 
@@ -86,7 +95,9 @@ namespace PaintWithMe
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: all my content loading is in initialize.  what's the advantage to putting it here?
+
+            PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
+            renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);//, 1, graphics.GraphicsDevice.DisplayMode.Format);
         }
 
         /// <summary>
@@ -140,10 +151,15 @@ namespace PaintWithMe
         {
             GraphicsDevice.Clear(Color.White);
 
-            spriteBatch.Begin();
-            foreach (IPaintingAction paintingAction in paintingActions)
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             {
-                paintingAction.Draw(spriteBatch);
+                // Apply the post process shader
+                //effectPost.CurrentTechnique.Passes[0].Apply();
+
+                foreach (IPaintingAction paintingAction in paintingActions)
+                {
+                    paintingAction.Draw(spriteBatch);
+                }
             }
             spriteBatch.End();
 

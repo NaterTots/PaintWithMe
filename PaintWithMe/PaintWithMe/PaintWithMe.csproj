@@ -63,6 +63,7 @@
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
@@ -118,8 +119,14 @@
     <Compile Include="Input\JoystickDevice.cs" />
     <Compile Include="Input\KeyboardDevice.cs" />
     <Compile Include="Input\KinectDevice.cs" />
+    <Compile Include="Input\SNESControllerDevice.cs" />
+    <Compile Include="Input\XboxDrumSetDevice.cs" />
+    <Compile Include="Output\BodyMovementPaintingAction.cs" />
+    <Compile Include="Output\FireworkPaintingAction.cs" />
     <Compile Include="Output\PaintingAction.cs" />
     <Compile Include="Output\PositionalPaintingAction.cs" />
+    <Compile Include="Output\PrettyPrincessPaintingAction.cs" />
+    <Compile Include="Output\ShapePaintingAction.cs" />
     <Compile Include="Output\TestPaintingAction.cs" />
     <Compile Include="Output\TextureManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

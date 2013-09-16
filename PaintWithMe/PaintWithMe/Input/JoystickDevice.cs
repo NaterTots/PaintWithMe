@@ -9,13 +9,76 @@ using SharpDX.DirectInput;
 
 namespace PaintWithMe
 {
-    class JoystickDevice : IInputDevice
+    class JoystickDevice
     {
         Joystick joystick = null;
 
         //TODO: better way to do this
         int previousRotationZValue = 0;
 
+        public bool Initialize(string instanceName)
+        {
+            bool bFoundDevice = false;
+
+            // Initialize DirectInput
+            DirectInput directInput = new DirectInput();
+
+            // Find a Joystick Guid
+            Guid joystickGuid = Guid.Empty;
+
+            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AllDevices))
+            {
+                if (deviceInstance.InstanceName == instanceName)
+                {
+                    //found the device
+                    joystickGuid = deviceInstance.InstanceGuid;
+                }
+            }
+
+            // If Gamepad not found, look for a Joystick
+            if (joystickGuid == Guid.Empty)
+            {
+                foreach (var deviceInstance in directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices))
+                {
+                    if (deviceInstance.InstanceName == instanceName)
+                    {
+                        joystickGuid = deviceInstance.InstanceGuid;
+                    }
+                }
+            }
+
+            // If Joystick not found, throws an error
+            if (joystickGuid == Guid.Empty)
+            {
+                Console.WriteLine("No joystick/Gamepad found: " + instanceName);
+            }
+            else
+            {
+                bFoundDevice = true;
+
+                // Instantiate the joystick
+                joystick = new Joystick(directInput, joystickGuid);
+
+                Console.WriteLine("Found Joystick/Gamepad with GUID: {0}", joystickGuid);
+
+                // Query all suported ForceFeedback effects
+                var allEffects = joystick.GetEffects();
+                foreach (var effectInfo in allEffects)
+                {
+                    Console.WriteLine("Effect available {0}", effectInfo.Name);
+                }
+
+                // Set BufferSize in order to use buffered data.
+                joystick.Properties.BufferSize = 128;
+
+                // Acquire the joystick
+                joystick.Acquire();
+            }
+
+            return bFoundDevice;
+        }
+
+        /*
         public void Initialize()
         {
             // Initialize DirectInput
@@ -61,7 +124,9 @@ namespace PaintWithMe
             // Query all suported ForceFeedback effects
             var allEffects = joystick.GetEffects();
             foreach (var effectInfo in allEffects)
+            {
                 Console.WriteLine("Effect available {0}", effectInfo.Name);
+            }
 
             // Set BufferSize in order to use buffered data.
             joystick.Properties.BufferSize = 128;
@@ -69,6 +134,8 @@ namespace PaintWithMe
             // Acquire the joystick
             joystick.Acquire();
         }
+         */
+
         /*
         public bool Update(GameTime elapsedTime, out List<IPaintingAction> newPaintStrokes)
         {
@@ -86,7 +153,22 @@ namespace PaintWithMe
             return false;
         }
         */
-        
+
+        public JoystickUpdate[] Update(GameTime elapsedTime)
+        {
+            if (joystick != null)
+            {
+                joystick.Poll();
+                JoystickUpdate[] datas = joystick.GetBufferedData();
+                return datas;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /*
         public bool Update(GameTime elapsedTime, out List<IPaintingAction> newPaintStrokes)
         {
             newPaintStrokes = null;
@@ -125,8 +207,9 @@ namespace PaintWithMe
 
             return (newPaintStrokes != null);
         }
+         */
 
-        private void AddPaintingActionToList(IPaintingAction paintingAction, ref List<IPaintingAction> paintingList)
+        protected void AddPaintingActionToList(IPaintingAction paintingAction, ref List<IPaintingAction> paintingList)
         {
             if (paintingList == null)
             {

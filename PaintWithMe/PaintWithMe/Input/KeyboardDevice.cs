@@ -29,17 +29,25 @@ namespace PaintWithMe
 
             if (HasButtonBeenPressed(previousState, currentState, Keys.J))
             {
-                AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.KinectJump), ref newPaintStrokes);
+                if (ServiceManager.Instance.GetService<RandomGenerator>(ServiceType.RandomGenerator).NextBool())
+                {
+                    AddPaintingActionToList(new BodyMovementPaintingAction(BodyMovementPaintingAction.BodyMovementType.JumpStyle1), ref newPaintStrokes);
+                }
+                else
+                {
+                    AddPaintingActionToList(new BodyMovementPaintingAction(BodyMovementPaintingAction.BodyMovementType.JumpStyle2), ref newPaintStrokes);
+                }
+                
             }
 
             if (HasButtonBeenPressed(previousState, currentState, Keys.R))
             {
-                AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.KinectRightArmUp), ref newPaintStrokes);
+                AddPaintingActionToList(new BodyMovementPaintingAction(BodyMovementPaintingAction.BodyMovementType.RightKick), ref newPaintStrokes);
             }
 
             if (HasButtonBeenPressed(previousState, currentState, Keys.L))
             {
-                AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.KinectLeftArmUp), ref newPaintStrokes);
+                AddPaintingActionToList(new BodyMovementPaintingAction(BodyMovementPaintingAction.BodyMovementType.LeftKick), ref newPaintStrokes);
             }
 
             if (HasButtonBeenPressed(previousState, currentState, Keys.A))
@@ -60,6 +68,31 @@ namespace PaintWithMe
             if (HasButtonBeenPressed(previousState, currentState, Keys.F))
             {
                 AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.KeyboardTest4), ref newPaintStrokes);
+            }
+
+            if (HasButtonBeenPressed(previousState, currentState, Keys.Q))
+            {
+                AddPaintingActionToList(new FireworkPaintingAction(FireworkPaintingAction.FireworkType.FireworkType1), ref newPaintStrokes);
+            }
+
+            if (HasButtonBeenPressed(previousState, currentState, Keys.W))
+            {
+                AddPaintingActionToList(new FireworkPaintingAction(FireworkPaintingAction.FireworkType.FireworkType2), ref newPaintStrokes);
+            }
+
+            if (HasButtonBeenPressed(previousState, currentState, Keys.E))
+            {
+                AddPaintingActionToList(new FireworkPaintingAction(FireworkPaintingAction.FireworkType.FireworkType3), ref newPaintStrokes);
+            }
+
+            if (HasButtonBeenPressed(previousState, currentState, Keys.P))
+            {
+                AddPaintingActionToList(new PrettyPrincessPaintingAction(), ref newPaintStrokes);
+            }
+
+            if (HasButtonBeenPressed(previousState, currentState, Keys.H))
+            {
+                AddPaintingActionToList(new BodyMovementPaintingAction(BodyMovementPaintingAction.BodyMovementType.HipShake), ref newPaintStrokes);
             }
 
             previousState = currentState;
