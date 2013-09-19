@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enumerations.cs" />
+    <Compile Include="Input\ArduinoDevice.cs" />
     <Compile Include="Input\InputDevice.cs" />
     <Compile Include="Input\JoystickDevice.cs" />
     <Compile Include="Input\KeyboardDevice.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PaintWithMeGame.cs" />
+    <Compile Include="Services\CanvasBackground.cs" />
     <Compile Include="Services\ConfigurationManager.cs" />
     <Compile Include="Services\FileLogger.cs" />
     <Compile Include="Services\Logger.cs" />

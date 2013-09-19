@@ -62,5 +62,10 @@ namespace PaintWithMe
                 spriteBatch.Draw(heartTexture, new Rectangle(heart.xcoord, heart.ycoord, heart.size, heart.size), null, Color.White, heart.rotation, new Vector2(0, 0), SpriteEffects.None, 0); 
             }
         }
+
+        public void Deactivate()
+        {
+
+        }
     }
 }

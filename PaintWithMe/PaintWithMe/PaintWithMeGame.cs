@@ -30,12 +30,22 @@ namespace PaintWithMe
 
         ServiceManager serviceManager = ServiceManager.Instance;
 
+        CanvasBackground _canvasBackground;
+
         Effect effectPost;
         RenderTarget2D renderTarget;
+
+        public bool DisplayBlackAndWhite { get; set; }
 
         public PaintWithMeGame()
         {
             graphics = new GraphicsDeviceManager(this);
+
+            graphics.PreferredBackBufferWidth = 768;
+            graphics.PreferredBackBufferHeight = 1024;
+
+            graphics.IsFullScreen = true;
+
             Content.RootDirectory = "Content";
 
             //TODO: is this the best place to decide which devices we need?
@@ -44,12 +54,12 @@ namespace PaintWithMe
             serviceManager.Add(new LogManager());
             serviceManager.Add(new RandomGenerator());
             serviceManager.Add(new TextureManager());
+            serviceManager.Add(new CanvasBackground());
 
             inputDevices.Add(new KinectDevice());
             inputDevices.Add(new KeyboardDevice());
-            //inputDevices.Add(new JoystickDevice());
-            inputDevices.Add(new XboxDrumSetDevice());
-            inputDevices.Add(new SNESControllerDevice());
+            //inputDevices.Add(new XboxDrumSetDevice());
+            //inputDevices.Add(new SNESControllerDevice());
 
             _backgroundCycleTimer = new Timer(OnCycleBackground, null, -1, Timeout.Infinite);
         }
@@ -82,6 +92,9 @@ namespace PaintWithMe
             }
 
             effectPost = Content.Load<Effect>("GrayscalePixelShader");
+            DisplayBlackAndWhite = false;
+
+            _canvasBackground = serviceManager.GetService<CanvasBackground>(ServiceType.CanvasBackground);
 
             base.Initialize();
         }
@@ -149,12 +162,15 @@ namespace PaintWithMe
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(_canvasBackground.GetBackgroundColor());
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             {
                 // Apply the post process shader
-                //effectPost.CurrentTechnique.Passes[0].Apply();
+                if (DisplayBlackAndWhite)
+                {
+                    effectPost.CurrentTechnique.Passes[0].Apply();
+                }
 
                 foreach (IPaintingAction paintingAction in paintingActions)
                 {

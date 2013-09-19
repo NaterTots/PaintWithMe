@@ -18,6 +18,7 @@ namespace PaintWithMe
         Logger,
         ConfigurationManager,
         Game,
-        TextureManager
+        TextureManager,
+        CanvasBackground
     }
 }

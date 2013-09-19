@@ -12,20 +12,23 @@ namespace PaintWithMe
     {
         KeyboardState previousState;
 
+        CanvasBackground _canvasBackground;
+
+        bool _redToggle = false;
+        bool _greenToggle = false;
+        bool _blueToggle = false;
+
         public void Initialize()
         {
             previousState = Keyboard.GetState();
+
+            _canvasBackground = ServiceManager.Instance.GetService<CanvasBackground>(ServiceType.CanvasBackground);
         }
 
         public bool Update(GameTime elapsedTime, out List<IPaintingAction> newPaintStrokes)
         {
             newPaintStrokes = null;
             KeyboardState currentState = Keyboard.GetState();
-
-            if (HasButtonBeenPressed(previousState, currentState, Keys.Space))
-            {
-                AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.KeyboardSpaceBar), ref newPaintStrokes);
-            }
 
             if (HasButtonBeenPressed(previousState, currentState, Keys.J))
             {
@@ -36,8 +39,7 @@ namespace PaintWithMe
                 else
                 {
                     AddPaintingActionToList(new BodyMovementPaintingAction(BodyMovementPaintingAction.BodyMovementType.JumpStyle2), ref newPaintStrokes);
-                }
-                
+                } 
             }
 
             if (HasButtonBeenPressed(previousState, currentState, Keys.R))
@@ -48,26 +50,6 @@ namespace PaintWithMe
             if (HasButtonBeenPressed(previousState, currentState, Keys.L))
             {
                 AddPaintingActionToList(new BodyMovementPaintingAction(BodyMovementPaintingAction.BodyMovementType.LeftKick), ref newPaintStrokes);
-            }
-
-            if (HasButtonBeenPressed(previousState, currentState, Keys.A))
-            {
-                AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.KeyboardTest1), ref newPaintStrokes);
-            }
-
-            if (HasButtonBeenPressed(previousState, currentState, Keys.S))
-            {
-                AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.KeyboardTest2), ref newPaintStrokes);
-            }
-
-            if (HasButtonBeenPressed(previousState, currentState, Keys.D))
-            {
-                AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.KeyboardTest3), ref newPaintStrokes);
-            }
-
-            if (HasButtonBeenPressed(previousState, currentState, Keys.F))
-            {
-                AddPaintingActionToList(new TestPaintingAction(ShapeActivationSource.KeyboardTest4), ref newPaintStrokes);
             }
 
             if (HasButtonBeenPressed(previousState, currentState, Keys.Q))
@@ -85,14 +67,32 @@ namespace PaintWithMe
                 AddPaintingActionToList(new FireworkPaintingAction(FireworkPaintingAction.FireworkType.FireworkType3), ref newPaintStrokes);
             }
 
+            if (HasButtonBeenPressed(previousState, currentState, Keys.H))
+            {
+                AddPaintingActionToList(new BodyMovementPaintingAction(BodyMovementPaintingAction.BodyMovementType.HipShake), ref newPaintStrokes);
+            }
+
             if (HasButtonBeenPressed(previousState, currentState, Keys.P))
             {
                 AddPaintingActionToList(new PrettyPrincessPaintingAction(), ref newPaintStrokes);
             }
 
-            if (HasButtonBeenPressed(previousState, currentState, Keys.H))
+            if (HasButtonBeenPressed(previousState, currentState, Keys.D1))
             {
-                AddPaintingActionToList(new BodyMovementPaintingAction(BodyMovementPaintingAction.BodyMovementType.HipShake), ref newPaintStrokes);
+                _redToggle = !_redToggle;
+                _canvasBackground.ActivateRed(_redToggle);
+            }
+
+            if (HasButtonBeenPressed(previousState, currentState, Keys.D2))
+            {
+                _greenToggle = !_greenToggle;
+                _canvasBackground.ActivateGreen(_greenToggle);
+            }
+
+            if (HasButtonBeenPressed(previousState, currentState, Keys.D3))
+            {
+                _blueToggle = !_blueToggle;
+                _canvasBackground.ActivateBlue(_blueToggle);
             }
 
             previousState = currentState;
