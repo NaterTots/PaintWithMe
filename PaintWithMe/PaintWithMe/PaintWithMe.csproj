@@ -124,10 +124,11 @@
     <Compile Include="Input\XboxDrumSetDevice.cs" />
     <Compile Include="Output\BodyMovementPaintingAction.cs" />
     <Compile Include="Output\FireworkPaintingAction.cs" />
+    <Compile Include="Output\FramePaintingAction.cs" />
     <Compile Include="Output\PaintingAction.cs" />
-    <Compile Include="Output\PositionalPaintingAction.cs" />
     <Compile Include="Output\PrettyPrincessPaintingAction.cs" />
     <Compile Include="Output\ShapePaintingAction.cs" />
+    <Compile Include="Output\SmileyPaintingAction.cs" />
     <Compile Include="Output\TestPaintingAction.cs" />
     <Compile Include="Output\TextureManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

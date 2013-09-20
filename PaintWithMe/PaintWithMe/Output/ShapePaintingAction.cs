@@ -18,6 +18,9 @@ namespace PaintWithMe
         static Texture2D circleStrokeTexture;
         static Texture2D starStrokeTexture;
 
+        DateTime _deathDate;
+        static TimeSpan LifeSpan = new TimeSpan(0, 3, 0); //3 minutes
+
         private ShapeType type;
         private int xcoord;
         private int ycoord;
@@ -61,6 +64,8 @@ namespace PaintWithMe
             height = (int)(squareStrokeTexture.Height * sizeMultiplier);
 
             color = new Color(randomGenerator.Next(255), randomGenerator.Next(255), randomGenerator.Next(255), 200);
+
+            _deathDate = DateTime.Now + LifeSpan;
         }
 
         public void Update(GameTime elapsedTime)
@@ -127,6 +132,34 @@ namespace PaintWithMe
 
             width = (int)(squareStrokeTexture.Width * sizeMultiplier);
             height = (int)(squareStrokeTexture.Height * sizeMultiplier);
+        }
+
+        public bool TimeToKill(DateTime currentDateTime)
+        {
+            return (currentDateTime > _deathDate);
+        }
+
+        public bool CanExpire()
+        {
+            return true;
+        }
+
+        public void RandomShift(int shiftAmount)
+        {
+            //randomize location
+            RandomGenerator randomGenerator = ServiceManager.Instance.GetService<RandomGenerator>(ServiceType.RandomGenerator);
+            xcoord = xcoord + randomGenerator.Next(shiftAmount * 2) - shiftAmount;
+            ycoord = ycoord + randomGenerator.Next(shiftAmount * 2) - shiftAmount;
+        }
+
+        public bool ClearIfLocatedInArea(int x, int y)
+        {
+            bool bOverlap = false;
+            if (x > xcoord && x < xcoord + width && y > ycoord && y < ycoord + height)
+            {
+                bOverlap = true;
+            }
+            return bOverlap;
         }
     }
 }

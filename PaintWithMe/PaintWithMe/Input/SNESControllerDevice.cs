@@ -42,7 +42,10 @@ namespace PaintWithMe
         {
             newPaintStrokes = null;
 
-            foreach (JoystickUpdate state in base.Update(elapsedTime))
+            JoystickUpdate[] updates = base.Update(elapsedTime);
+            if (updates == null) return false;
+
+            foreach (JoystickUpdate state in updates)
             {
                 Debug.WriteLine("SNES Controller " + state.Offset.ToString() + " : " + state.Value.ToString());
 

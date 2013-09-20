@@ -17,7 +17,6 @@ namespace PaintWithMe
 
         public void Initialize()
         {
-            //TODO: is this the best place to decide which loggers we should use?
             this.Add(new FileLogger());
         }
 

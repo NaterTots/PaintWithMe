@@ -37,6 +37,9 @@ namespace PaintWithMe
             textures.Add("cartoon\\grass", gameInstance.Content.Load<Texture2D>("cartoon\\grass"));
             textures.Add("cartoon\\quickstroke_upward", gameInstance.Content.Load<Texture2D>("cartoon\\quickstroke_upward"));
             textures.Add("cartoon\\quickstroke_upward2", gameInstance.Content.Load<Texture2D>("cartoon\\quickstroke_upward2"));
+
+            textures.Add("cartoon\\smiley", gameInstance.Content.Load<Texture2D>("cartoon\\smiley"));
+            textures.Add("cartoon\\frame", gameInstance.Content.Load<Texture2D>("cartoon\\frame"));
         }
 
         public ServiceType GetServiceType()

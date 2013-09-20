@@ -15,6 +15,9 @@ namespace PaintWithMe
         static Texture2D fireworkType3StrokeTexture;
         static Texture2D fireworkType4StrokeTexture;
 
+        DateTime _deathDate;
+        static TimeSpan LifeSpan = new TimeSpan(0, 3, 0); //3 minutes
+
         private FireworkType type;
         private int xcoord;
         private int ycoord;
@@ -52,6 +55,8 @@ namespace PaintWithMe
             double sizeMultiplier = randomGenerator.NextDouble(.05, .10); //firework texture is large.  random size 5% to 10% of texture
             width = (int)(fireworkType1StrokeTexture.Width * sizeMultiplier);
             height = (int)(fireworkType1StrokeTexture.Height * sizeMultiplier);
+
+            _deathDate = DateTime.Now + LifeSpan;
         }
 
         public void Update(GameTime elapsedTime)
@@ -80,6 +85,34 @@ namespace PaintWithMe
             }
 
             spriteBatch.Draw(fireworkStrokeTexture, new Rectangle(xcoord, ycoord, width, height), null, Color.White, rotation, new Vector2(0, 0), SpriteEffects.None, 0); 
+        }
+
+        public bool TimeToKill(DateTime currentDateTime)
+        {
+            return (currentDateTime > _deathDate);
+        }
+
+        public bool CanExpire()
+        {
+            return true;
+        }
+
+        public void RandomShift(int shiftAmount)
+        {
+            //randomize location
+            RandomGenerator randomGenerator = ServiceManager.Instance.GetService<RandomGenerator>(ServiceType.RandomGenerator);
+            xcoord = xcoord + randomGenerator.Next(shiftAmount * 2) - shiftAmount;
+            ycoord = ycoord + randomGenerator.Next(shiftAmount * 2) - shiftAmount;
+        }
+
+        public bool ClearIfLocatedInArea(int x, int y)
+        {
+            bool bOverlap = false;
+            if (x > xcoord && x < xcoord + width && y > ycoord && y < ycoord + height)
+            {
+                bOverlap = true;
+            }
+            return bOverlap;
         }
     }
 }

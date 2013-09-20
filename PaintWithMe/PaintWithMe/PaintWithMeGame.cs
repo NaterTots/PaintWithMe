@@ -21,9 +21,13 @@ namespace PaintWithMe
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        System.Threading.Timer _backgroundCycleTimer;
 
-        const int BackgroundTimerPeriod = 1000 * 60 * 15; //Fifteen Minutes
+        const int MaxStrokeCount = 500;
+        const int StrokeShiftCoefficient = 10;
+        static TimeSpan TimeBetweenKillingPaintingStrokes = new TimeSpan(0, 0, 10); //10 seconds
+
+        DateTime nextTimeToKillPaintingStrokes;
+
 
         List<IInputDevice> inputDevices = new List<IInputDevice>();
         List<IPaintingAction> paintingActions = new List<IPaintingAction>();
@@ -41,14 +45,13 @@ namespace PaintWithMe
         {
             graphics = new GraphicsDeviceManager(this);
 
-            graphics.PreferredBackBufferWidth = 768;
-            graphics.PreferredBackBufferHeight = 1024;
+            //graphics.PreferredBackBufferWidth = 768;
+            //graphics.PreferredBackBufferHeight = 1024;
 
-            graphics.IsFullScreen = true;
+            //graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
-            //TODO: is this the best place to decide which devices we need?
             serviceManager.Add(this);
             serviceManager.Add(new ConfigurationManager());
             serviceManager.Add(new LogManager());
@@ -60,8 +63,7 @@ namespace PaintWithMe
             inputDevices.Add(new KeyboardDevice());
             //inputDevices.Add(new XboxDrumSetDevice());
             //inputDevices.Add(new SNESControllerDevice());
-
-            _backgroundCycleTimer = new Timer(OnCycleBackground, null, -1, Timeout.Infinite);
+            inputDevices.Add(new ArduinoDevice());
         }
 
         /// <summary>
@@ -84,7 +86,7 @@ namespace PaintWithMe
                     inputDevice.Initialize();
                 }
 
-                _backgroundCycleTimer.Change(BackgroundTimerPeriod, Timeout.Infinite);
+                nextTimeToKillPaintingStrokes = DateTime.Now + TimeBetweenKillingPaintingStrokes;
             }
             catch (Exception e)
             {
@@ -119,7 +121,6 @@ namespace PaintWithMe
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -139,6 +140,27 @@ namespace PaintWithMe
             foreach (IPaintingAction paintingAction in paintingActions)
             {
                 paintingAction.Update(gameTime);
+            }
+
+            DateTime currentTime = DateTime.Now;
+            if (nextTimeToKillPaintingStrokes < currentTime)
+            {
+                nextTimeToKillPaintingStrokes += TimeBetweenKillingPaintingStrokes;
+                paintingActions.RemoveAll(x => x.TimeToKill(currentTime) == true);
+            }
+
+            if (paintingActions.Count > MaxStrokeCount)
+            {
+                int strokesToRemove = paintingActions.Count - MaxStrokeCount;
+                for (int i = 0; i < paintingActions.Count && strokesToRemove > 0; i++)
+                {
+                    if (paintingActions[i].CanExpire())
+                    {
+                        paintingActions.RemoveAt(i);
+                        i--;
+                        strokesToRemove--;
+                    }
+                }
             }
 
             foreach (IInputDevice inputDevice in inputDevices)
@@ -182,12 +204,34 @@ namespace PaintWithMe
             base.Draw(gameTime);
         }
 
-        public void OnCycleBackground(object stateInfo)
+        public void RandomShiftPaintingStrokes()
         {
-            //For now - remove all painting actions
-            paintingActions.Clear();
+            foreach (IPaintingAction paintingAction in paintingActions)
+            {
+                paintingAction.RandomShift(StrokeShiftCoefficient);
+            }
+        }
 
-            _backgroundCycleTimer.Change(BackgroundTimerPeriod, Timeout.Infinite);
+        public void ClearAroundPoint(int x, int y)
+        {
+            for (int i = 0; i < paintingActions.Count; i++)
+            {
+                if (paintingActions[i].ClearIfLocatedInArea(x, y))
+                {
+                    paintingActions.RemoveAt(i);
+                    --i;
+                }
+            }
+        }
+
+        public void RemoveFrame()
+        {
+            paintingActions.RemoveAll(x => x.GetType() == typeof(FramePaintingAction));
+        }
+
+        public void RemoveSmiley()
+        {
+            paintingActions.RemoveAll(x => x.GetType() == typeof(SmileyPaintingAction));
         }
 
         #region IService

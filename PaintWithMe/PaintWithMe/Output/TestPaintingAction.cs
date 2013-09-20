@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PaintWithMe
 {
-    class TestPaintingAction : IPaintingAction
+    class TestPaintingAction //: IPaintingAction
     {
         private int xcoord;
         private int ycoord;
